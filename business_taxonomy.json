@@ -1,0 +1,365 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2025-11-12",
+  "organization": {
+    "name": "Bayer Crop Science",
+    "code": "BCS"
+  },
+  "hierarchy": {
+    "division": {
+      "name": "R&D",
+      "display_name": "Research & Development",
+      "business_units": {
+        "row_crop": {
+          "name": "row_crop",
+          "display_name": "Row Crop R&D",
+          "description": "Research and development for row crop products including corn, soybean, cotton, and canola",
+          "subdivisions": {
+            "breeding": {
+              "name": "breeding",
+              "display_name": "Breeding",
+              "description": "Plant breeding, genetics, and field trial operations",
+              "functional_areas": [
+                {
+                  "name": "product_deployment",
+                  "display_name": "Product Deployment",
+                  "description": "Product performance analysis and deployment decisions"
+                },
+                {
+                  "name": "field_trials",
+                  "display_name": "Field Trials",
+                  "description": "Field trial management and data collection"
+                },
+                {
+                  "name": "early_breeding",
+                  "display_name": "Early Breeding",
+                  "description": "Early stage breeding programs and product development"
+                },
+                {
+                  "name": "seed_processing",
+                  "display_name": "Seed Processing",
+                  "description": "Seed processing and quality operations"
+                },
+                {
+                  "name": "trait_integration",
+                  "display_name": "Trait Integration",
+                  "description": "Integration of genetic traits into breeding programs"
+                },
+                {
+                  "name": "workflow_automation",
+                  "display_name": "Workflow Automation",
+                  "description": "Automated workflows for breeding operations"
+                }
+              ],
+              "views": [
+                {
+                  "name": "deployments",
+                  "type": "business",
+                  "functional_area": "product_deployment",
+                  "tags": ["corn", "deployment", "yield", "h2h", "performance"]
+                },
+                {
+                  "name": "velocity_field_trials",
+                  "type": "business_application",
+                  "functional_area": "field_trials",
+                  "tags": ["field_trials", "velocity", "nursery", "operations"]
+                },
+                {
+                  "name": "velocity_nursery_operations",
+                  "type": "business_application",
+                  "functional_area": "field_trials",
+                  "tags": ["nursery", "operations", "velocity"]
+                },
+                {
+                  "name": "pds_early_breeding",
+                  "type": "business",
+                  "functional_area": "early_breeding",
+                  "tags": ["pds", "early_breeding", "product_development"]
+                },
+                {
+                  "name": "seed_processing",
+                  "type": "business",
+                  "functional_area": "seed_processing",
+                  "tags": ["seed", "processing", "shellmatic"]
+                },
+                {
+                  "name": "seed_processing_ytp",
+                  "type": "business",
+                  "functional_area": "seed_processing",
+                  "tags": ["seed", "processing", "ytp", "yield_to_plot"]
+                },
+                {
+                  "name": "traitintegration",
+                  "type": "business",
+                  "functional_area": "trait_integration",
+                  "tags": ["trait", "integration", "genetics"]
+                },
+                {
+                  "name": "gds_manifest",
+                  "type": "business",
+                  "functional_area": "field_trials",
+                  "tags": ["gds", "manifest", "data_management"]
+                },
+                {
+                  "name": "kynetec",
+                  "type": "business",
+                  "functional_area": "product_deployment",
+                  "tags": ["market_research", "competitive_intelligence"]
+                },
+                {
+                  "name": "cde_workflow",
+                  "type": "application",
+                  "functional_area": "workflow_automation",
+                  "tags": ["workflow", "automation", "analytics", "cde"]
+                }
+              ]
+            },
+            "biotech": {
+              "name": "biotech",
+              "display_name": "Biotechnology",
+              "description": "Gene editing, molecular biology, and biotechnology research",
+              "functional_areas": [
+                {
+                  "name": "gene_editing",
+                  "display_name": "Gene Editing",
+                  "description": "CRISPR and gene editing operations"
+                },
+                {
+                  "name": "allele_analysis",
+                  "display_name": "Allele Analysis",
+                  "description": "Genetic allele identification and analysis"
+                }
+              ],
+              "views": [
+                {
+                  "name": "edited_allele_analysis",
+                  "type": "business",
+                  "functional_area": "allele_analysis",
+                  "tags": ["gene_editing", "allele", "sequencing", "CRISPR"]
+                }
+              ]
+            }
+          }
+        },
+        "veg_rd": {
+          "name": "veg_rd",
+          "display_name": "Vegetable R&D",
+          "description": "Research and development for vegetable products",
+          "subdivisions": {
+            "breeding": {
+              "name": "breeding",
+              "display_name": "Vegetable Breeding",
+              "description": "Vegetable breeding and variety development",
+              "functional_areas": [
+                {
+                  "name": "field_trials",
+                  "display_name": "Field Trials",
+                  "description": "Vegetable field trial management"
+                }
+              ],
+              "views": [
+                {
+                  "name": "vegetable_field_trials",
+                  "type": "business",
+                  "functional_area": "field_trials",
+                  "tags": ["vegetables", "field_trials", "breeding"]
+                }
+              ]
+            }
+          }
+        },
+        "shared_services": {
+          "name": "shared_services",
+          "display_name": "Shared R&D Services",
+          "description": "Cross-functional services and applications used across all R&D business units",
+          "applicable_to": ["row_crop.breeding", "row_crop.biotech", "veg_rd.breeding"],
+          "subdivisions": {
+            "infrastructure": {
+              "name": "infrastructure",
+              "display_name": "Infrastructure & Applications",
+              "description": "Shared infrastructure, reference data, and cross-functional applications",
+              "functional_areas": [
+                {
+                  "name": "geospatial",
+                  "display_name": "Geospatial Services",
+                  "description": "Location intelligence and geopolitical data"
+                },
+                {
+                  "name": "metadata_catalog",
+                  "display_name": "Metadata Catalog",
+                  "description": "Semantic catalog and metadata management"
+                },
+                {
+                  "name": "simulation",
+                  "display_name": "Simulation & Modeling",
+                  "description": "Digital twin and predictive analytics"
+                }
+              ],
+              "views": [
+                {
+                  "name": "geopolitical",
+                  "type": "application",
+                  "functional_area": "geospatial",
+                  "tags": ["location", "geography", "geopolitical", "reference_data"],
+                  "shared_across": ["breeding", "biotech", "veg"]
+                },
+                {
+                  "name": "location360",
+                  "type": "application",
+                  "functional_area": "geospatial",
+                  "tags": ["location", "field", "360", "geospatial"],
+                  "shared_across": ["breeding", "biotech", "veg"]
+                },
+                {
+                  "name": "semantic_catalog",
+                  "type": "application",
+                  "functional_area": "metadata_catalog",
+                  "tags": ["metadata", "catalog", "semantic", "cube_views"],
+                  "shared_across": ["all"]
+                },
+                {
+                  "name": "digital_twin",
+                  "type": "business",
+                  "functional_area": "simulation",
+                  "tags": ["simulation", "digital_twin", "predictive", "modeling"]
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "view_classifications": {
+    "cde_workflow": {
+      "purpose": "Workflow execution and monitoring for analysis pipelines",
+      "data_domains": ["workflow", "execution", "cohort", "analytics"],
+      "primary_users": ["data_scientists", "analysts", "breeding_teams"],
+      "update_frequency": "real-time"
+    },
+    "deployments": {
+      "purpose": "Product deployment analytics and head-to-head comparisons",
+      "data_domains": ["product", "yield", "agronomics", "disease", "performance"],
+      "primary_users": ["product_managers", "breeding_teams", "deployment_teams"],
+      "update_frequency": "weekly"
+    },
+    "digital_twin": {
+      "purpose": "Simulation and predictive analytics for product performance",
+      "data_domains": ["simulation", "product", "location", "yield", "moisture"],
+      "primary_users": ["data_scientists", "product_teams", "market_intelligence"],
+      "update_frequency": "monthly"
+    },
+    "edited_allele_analysis": {
+      "purpose": "Gene editing analysis and allele tracking",
+      "data_domains": ["genetics", "sequencing", "alleles", "gene_editing"],
+      "primary_users": ["biotech_scientists", "molecular_biologists"],
+      "update_frequency": "daily"
+    },
+    "gds_manifest": {
+      "purpose": "Genomic data system manifest and sample tracking",
+      "data_domains": ["samples", "manifest", "genomics"],
+      "primary_users": ["lab_technicians", "data_managers"],
+      "update_frequency": "daily"
+    },
+    "geopolitical": {
+      "purpose": "Geopolitical and administrative boundary reference data",
+      "data_domains": ["location", "geography", "administrative", "boundaries"],
+      "primary_users": ["all_users"],
+      "update_frequency": "quarterly"
+    },
+    "kynetec": {
+      "purpose": "Market research and competitive intelligence",
+      "data_domains": ["market", "competition", "intelligence"],
+      "primary_users": ["market_analysts", "product_managers"],
+      "update_frequency": "monthly"
+    },
+    "location360": {
+      "purpose": "Comprehensive location intelligence and field data",
+      "data_domains": ["location", "field", "geography", "environment"],
+      "primary_users": ["field_teams", "agronomists", "data_scientists"],
+      "update_frequency": "weekly"
+    },
+    "pds_early_breeding": {
+      "purpose": "Early stage breeding program tracking and analysis",
+      "data_domains": ["breeding", "early_stage", "product_development"],
+      "primary_users": ["breeders", "product_development"],
+      "update_frequency": "weekly"
+    },
+    "seed_processing": {
+      "purpose": "Seed processing operations and quality tracking",
+      "data_domains": ["seed", "processing", "quality", "shellmatic"],
+      "primary_users": ["processing_teams", "quality_control"],
+      "update_frequency": "daily"
+    },
+    "seed_processing_ytp": {
+      "purpose": "Yield-to-plot seed processing analysis",
+      "data_domains": ["seed", "processing", "yield", "plot"],
+      "primary_users": ["processing_teams", "breeding_teams"],
+      "update_frequency": "daily"
+    },
+    "semantic_catalog": {
+      "purpose": "Metadata catalog for all cubes and views",
+      "data_domains": ["metadata", "catalog", "semantic", "data_dictionary"],
+      "primary_users": ["all_users", "data_stewards"],
+      "update_frequency": "on_demand"
+    },
+    "traitintegration": {
+      "purpose": "Trait integration tracking and analysis",
+      "data_domains": ["traits", "genetics", "integration"],
+      "primary_users": ["breeders", "trait_teams"],
+      "update_frequency": "weekly"
+    },
+    "vegetable_field_trials": {
+      "purpose": "Vegetable field trial management and analysis",
+      "data_domains": ["vegetables", "field_trials", "breeding"],
+      "primary_users": ["veg_breeders", "field_teams"],
+      "update_frequency": "weekly"
+    },
+    "velocity_field_trials": {
+      "purpose": "Velocity field trial operations and tracking",
+      "data_domains": ["field_trials", "velocity", "operations"],
+      "primary_users": ["field_teams", "breeding_teams"],
+      "update_frequency": "daily"
+    },
+    "velocity_nursery_operations": {
+      "purpose": "Velocity nursery operations management",
+      "data_domains": ["nursery", "operations", "velocity"],
+      "primary_users": ["nursery_teams", "operations"],
+      "update_frequency": "daily"
+    }
+  },
+  "view_relationships": {
+    "deployments": {
+      "related_views": ["velocity_field_trials", "pds_early_breeding", "digital_twin"],
+      "shared_measures": ["yield", "moisture", "test_weight"],
+      "shared_dimensions": ["product", "location", "year"]
+    },
+    "velocity_field_trials": {
+      "related_views": ["velocity_nursery_operations", "deployments", "location360"],
+      "shared_dimensions": ["location", "field", "product"]
+    },
+    "edited_allele_analysis": {
+      "related_views": ["gds_manifest"],
+      "shared_dimensions": ["sample", "barcode"]
+    },
+    "geopolitical": {
+      "related_views": ["location360"],
+      "relationship_type": "reference_data"
+    },
+    "location360": {
+      "related_views": ["geopolitical", "velocity_field_trials", "vegetable_field_trials"],
+      "relationship_type": "reference_data"
+    }
+  },
+  "metadata": {
+    "total_views": 16,
+    "view_types": {
+      "business": 11,
+      "application": 4,
+      "business_application": 2
+    },
+    "business_units": 3,
+    "subdivisions": 4,
+    "functional_areas": 13
+  }
+}
