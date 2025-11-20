@@ -1,0 +1,47 @@
+# Auto-generated requirements.txt - 2025-11-18 17:31:39
+# Latest compatible versions for Schema-Aware SLM Training
+# Python 3.12+ required
+
+# Core ML Framework
+# Install separately: pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+torch>=2.1.0,<3.0.0
+torchvision>=0.16.0,<1.0.0
+torchaudio>=2.1.0,<3.0.0
+
+# Transformers & Training
+# No upper version limit to ensure compatibility with the latest models like Phi-3
+transformers
+datasets
+accelerate
+peft
+trl
+
+# Tokenization & Serialization
+sentencepiece>=0.2.1,<1.0.0
+protobuf>=6.33.1,<7.0.0
+
+# Training Monitoring
+tensorboard>=2.20.0,<3.0.0
+
+# Data Processing
+pandas>=2.3.3,<3.0.0
+numpy>=2.3.5,<3.0.0
+tqdm>=4.67.1,<5.0.0
+
+# Visualization
+matplotlib>=3.10.7,<4.0.0
+seaborn>=0.13.2,<1.0.0
+
+# Development Tools
+jupyter>=1.1.1,<2.0.0
+ipykernel>=7.1.0,<8.0.0
+black>=25.11.0,<26.0.0
+flake8>=7.3.0,<8.0.0
+isort>=7.0.0,<8.0.0
+
+# Additional Utilities
+rich>=14.2.0,<15.0.0
+pyyaml>=6.0.3,<7.0.0
+
+# Quantization
+bitsandbytes>=0.42.0,<1.0.0

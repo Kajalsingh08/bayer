@@ -1,0 +1,525 @@
+.PHONY: help setup install verify clean test corpus pretrain finetune all merge-and-test
+
+# Variables
+PYTHON := python3.12
+VENV := venv
+VENV_BIN := $(VENV)/bin
+PIP := $(VENV_BIN)/pip
+PYTHON_VENV := $(VENV_BIN)/python
+
+# Data paths
+TEST_META := data/test_meta.json
+FULL_META := data/full_meta.json
+TAXONOMY := data/business_taxonomy.json
+
+# Output paths
+CORPUS_TEST := training_data/corpus_test.txt
+CORPUS_FULL := training_data/schema_corpus.txt
+INSTRUCTIONS_DATA := training_data/instructions.jsonl
+MODEL_REPO_URL := https://huggingface.co/microsoft/Phi-3-mini-4k-instruct
+MODEL_LOCAL_PATH := models/phi-3-mini-4k-instruct
+MODEL_PRETRAINED_BASE_DIR := models/phi3_schema_pretrained
+MODEL_PRETRAINED_EARLY_STOP_DIR := models/phi3_schema_pretrained_early_stopping
+
+# --- SELECT THE MODEL TO FINETUNE ---
+# This variable points to the model that will be used for fine-tuning.
+# It defaults to the output of the standard `pretrain` command.
+# You can override it from the command line.
+#
+# Example for early stopping model:
+# make finetune PRETRAINED_MODEL_PATH=$(MODEL_PRETRAINED_EARLY_STOP_DIR)/best_model
+PRETRAINED_MODEL_PATH ?= $(MODEL_PRETRAINED_BASE_DIR)/final
+
+MODEL_LORA := models/phi3_lora_tuned
+MODEL_LORA_EARLY_STOP_DIR := models/phi3_lora_tuned_early_stopping
+MODEL_MERGED_DIR := models/phi3_merged_model
+
+# Fine-tuning parameters
+FINETUNE_EPOCHS := 3
+LORA_RANK := 16
+LORA_ALPHA := 32
+LORA_DROPOUT := 0.05
+
+# Colors for output
+BLUE := \033[0;34m
+GREEN := \033[0;32m
+YELLOW := \033[0;33m
+RED := \033[0;31m
+NC := \033[0m # No Color
+
+##@ Help
+
+help: ## Display this help message
+	@echo "$(BLUE)Schema-Aware SLM Training - Makefile Commands$(NC)"
+	@echo ""
+	@awk 'BEGIN {FS = ":.*##"; printf "Usage:\n  make $(GREEN)<target>$(NC)\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  $(GREEN)%-20s$(NC) %s\n", $$1, $$2 } /^##@/ { printf "\n$(BLUE)%s$(NC)\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
+
+##@ Environment Setup
+
+setup: ## Create virtual environment
+	@echo "$(BLUE)Creating Python 3.12 virtual environment...$(NC)"
+	@if [ -d "$(VENV)" ]; then \
+		echo "$(YELLOW)Virtual environment already exists. Use 'make clean' to remove it.$(NC)"; \
+	else \
+		$(PYTHON) -m venv $(VENV); \
+		echo "$(GREEN)✓ Virtual environment created$(NC)"; \
+	fi
+
+install-pytorch: setup ## Install PyTorch (auto-detects platform)
+	@echo "$(BLUE)Installing PyTorch...$(NC)"
+	@$(PIP) install --upgrade pip setuptools wheel
+	@echo "$(YELLOW)Detecting platform...$(NC)"
+	@if [ "$$(uname)" = "Darwin" ]; then \
+		echo "$(YELLOW)macOS detected - Installing PyTorch with MPS support$(NC)"; \
+		$(PIP) install torch torchvision torchaudio; \
+	else \
+		echo "$(YELLOW)Linux detected - Installing PyTorch with CUDA 12.1$(NC)"; \
+		$(PIP) install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121; \
+	fi
+	@echo "$(GREEN)✓ PyTorch installed$(NC)"
+	@$(PYTHON_VENV) -c "import torch; print(f'  PyTorch version: {torch.__version__}'); \
+		print(f'  CUDA available: {torch.cuda.is_available()}'); \
+		print(f'  MPS available: {torch.backends.mps.is_available() if hasattr(torch.backends, \"mps\") else False}')"
+
+install-pytorch-cuda: setup ## Install PyTorch with CUDA (force CUDA installation)
+	@echo "$(BLUE)Installing PyTorch with CUDA 12.1...$(NC)"
+	@$(PIP) install --upgrade pip setuptools wheel
+	@$(PIP) install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+	@echo "$(GREEN)✓ PyTorch with CUDA installed$(NC)"
+
+install-git-lfs: ## Install Git LFS for the current platform
+	@echo "$(BLUE)Installing Git LFS...$(NC)"
+	@if command -v git-lfs &> /dev/null; then \
+		echo "$(YELLOW)Git LFS is already installed.$(NC)"; \
+	else \
+		if [ -f /etc/debian_version ]; then \
+			echo "$(YELLOW)Debian/Ubuntu detected. Installing via apt-get...$(NC)"; \
+			curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash; \
+			sudo apt-get install git-lfs -y; \
+		elif [ -f /etc/redhat-release ]; then \
+			echo "$(YELLOW)Red Hat/CentOS detected. Installing via yum...$(NC)"; \
+			curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | sudo bash; \
+			sudo yum install git-lfs -y; \
+		elif [ "$$(uname)" = "Darwin" ]; then \
+			echo "$(YELLOW)macOS detected. Please install via Homebrew: 'brew install git-lfs'$(NC)"; \
+			exit 1; \
+		else \
+			echo "$(RED)Unsupported OS for automatic installation. Please install Git LFS manually.$(NC)"; \
+			exit 1; \
+		fi; \
+		git lfs install; \
+		echo "$(GREEN)✓ Git LFS installed and configured.$(NC)"; \
+	fi
+
+install-pytorch-cpu: setup ## Install PyTorch CPU-only (for testing/development)
+	@echo "$(BLUE)Installing PyTorch (CPU only)...$(NC)"
+	@$(PIP) install --upgrade pip setuptools wheel
+	@$(PIP) install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+	@echo "$(GREEN)✓ PyTorch CPU-only installed$(NC)"
+
+install: install-pytorch install-git-lfs ## Install/upgrade all dependencies
+	@echo "$(BLUE)Installing/upgrading Python dependencies...$(NC)"
+	@$(PIP) install --upgrade -r requirements.txt
+	@echo "$(GREEN)✓ All dependencies installed/upgraded$(NC)"
+	@echo ""
+	@echo "$(YELLOW)Run 'make verify' to check installation$(NC)"
+
+install-kernel: ## Install Jupyter kernel
+	@echo "$(BLUE)Installing Jupyter kernel...$(NC)"
+	@$(PYTHON_VENV) -m ipykernel install --user --name=slm-training \
+		--display-name="Python 3.12 (SLM Training)"
+	@echo "$(GREEN)✓ Jupyter kernel installed$(NC)"
+
+##@ Verification
+
+verify: ## Verify environment setup
+	@echo "$(BLUE)Verifying environment...$(NC)"
+	@$(PYTHON_VENV) verify_environment.py
+
+check-gpu: ## Check GPU availability
+	@echo "$(BLUE)Checking GPU status...$(NC)"
+	@$(PYTHON_VENV) -c "import torch; print(f'CUDA Available: {torch.cuda.is_available()}'); \
+		print(f'GPU: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else \"None\"}')"
+
+##@ Data Preparation
+
+dirs: ## Create necessary directories
+	@echo "$(BLUE)Creating directories...$(NC)"
+	@mkdir -p training_data
+	@mkdir -p models
+	@mkdir -p scripts
+	@mkdir -p logs
+	@echo "$(GREEN)✓ Directories created$(NC)"
+
+download-model: install-git-lfs dirs ## Download the base SLM model using Git LFS
+	@echo "$(BLUE)Downloading base model...$(NC)"
+	@if [ -d "$(MODEL_LOCAL_PATH)" ]; then \
+		echo "$(YELLOW)Model directory '$(MODEL_LOCAL_PATH)' already exists. Skipping download.$(NC)"; \
+	else \
+		echo "$(YELLOW)Cloning from $(MODEL_REPO_URL)... This will take a while.$(NC)"; \
+		git clone $(MODEL_REPO_URL) $(MODEL_LOCAL_PATH); \
+		echo "$(GREEN)✓ Model downloaded successfully.$(NC)"; \
+	fi
+
+generate-corpus: dirs ## Generate training corpus from metadata
+	@echo "$(BLUE)Generating training corpus...$(NC)"
+	@if [ ! -f "scripts/generate_corpus.py" ]; then \
+		echo "$(RED)Error: scripts/generate_corpus.py not found$(NC)"; \
+		exit 1; \
+	fi
+	@$(PYTHON_VENV) scripts/generate_corpus.py
+	@echo "$(GREEN)✓ Corpus generated in training_data/$(NC)"
+
+generate-instructions: dirs ## Generate instruction dataset for fine-tuning
+	@echo "$(BLUE)Generating instruction dataset...$(NC)"
+	@$(PYTHON_VENV) scripts/generate_instructions.py \
+		--meta-file $(FULL_META) \
+		--output-file $(INSTRUCTIONS_DATA) \
+		--num-instructions 5000
+	@echo "$(GREEN)✓ 500 instructions generated at $(INSTRUCTIONS_DATA)$(NC)"
+
+##@ Training
+
+pretrain: download-model generate-corpus ## Run continued pre-training (fixed 3 epochs)
+	@echo "$(BLUE)Starting continued pre-training...$(NC)"
+	@echo "$(YELLOW)Setting TOKENIZERS_PARALLELISM to false to avoid deadlocks...$(NC)"
+	@export TOKENIZERS_PARALLELISM=false && \
+	if [ ! -f "scripts/pretrain_model.py" ]; then
+		echo "$(RED)Error: scripts/pretrain_model.py not found$(NC)"; \
+		exit 1; \
+	fi; \
+	$(PYTHON_VENV) scripts/pretrain_model.py
+	@echo "$(BLUE)Copying model source files to the new directory...$(NC)"
+	@cp $(MODEL_LOCAL_PATH)/*.py $(MODEL_PRETRAINED_BASE_DIR)/final/
+	@echo "$(GREEN)✓ Pre-training complete. Model saved to $(MODEL_PRETRAINED_BASE_DIR)/final$(NC)"
+
+pretrain-early-stopping: download-model generate-corpus ## Run CPT with intelligent early stopping
+	@echo "$(BLUE)Starting continued pre-training with Early Stopping...$(NC)"
+	@echo "$(YELLOW)Setting TOKENIZERS_PARALLELISM to false to avoid deadlocks...$(NC)"
+	@export TOKENIZERS_PARALLELISM=false && \
+	if [ ! -f "scripts/pretrain_with_early_stopping.py" ]; then
+		echo "$(RED)Error: scripts/pretrain_with_early_stopping.py not found$(NC)"; \
+		exit 1; \
+	fi; \
+	$(PYTHON_VENV) scripts/pretrain_with_early_stopping.py
+	@echo "$(BLUE)Copying model source files to the new directory...$(NC)"
+	@cp $(MODEL_LOCAL_PATH)/*.py $(MODEL_PRETRAINED_EARLY_STOP_DIR)/best_model/
+	@echo "$(GREEN)✓ Pre-training complete. Best model saved.$(NC)"
+
+finetune: generate-instructions ## Run PEFT instruction fine-tuning on the pre-trained model
+	@echo "$(BLUE)Starting PEFT instruction fine-tuning...$(NC)"
+	@export TOKENIZERS_PARALLELISM=false && \
+	if [ ! -f "scripts/finetune_lora.py" ]; then \
+		echo "$(RED)Error: scripts/finetune_lora.py not found$(NC)"; \
+		exit 1; \
+	fi; \
+	if [ ! -d "$(PRETRAINED_MODEL_PATH)" ]; then \
+		echo "$(RED)Error: Pre-trained model to fine-tune not found at [$(PRETRAINED_MODEL_PATH)]$(NC)"; \
+		echo "$(YELLOW)Please ensure the path is correct or run pre-training first.$(NC)"; \
+		echo "$(YELLOW)You can override the path like this: make finetune PRETRAINED_MODEL_PATH=/path/to/your/model$(NC)"; \
+		exit 1; \
+	fi; \
+	if [ ! -f "$(INSTRUCTIONS_DATA)" ]; then \
+		echo "$(RED)Error: Instruction data not found at $(INSTRUCTIONS_DATA)$(NC)"; \
+		echo "$(YELLOW)Run 'make generate-instructions' first.$(NC)"; \
+		exit 1; \
+	fi; \
+	$(PYTHON_VENV) scripts/finetune_lora.py \
+		--base_model_path $(PRETRAINED_MODEL_PATH) \
+		--dataset_path $(INSTRUCTIONS_DATA) \
+		--output_dir $(MODEL_LORA) \
+		--epochs $(FINETUNE_EPOCHS) \
+		--lora_r $(LORA_RANK) \
+		--lora_alpha $(LORA_ALPHA) \
+		--lora_dropout $(LORA_DROPOUT)
+	@echo "$(GREEN)✓ Fine-tuning complete. LoRA adapters saved to $(MODEL_LORA)$(NC)"
+
+finetune-early-stopping: generate-instructions ## Run PEFT fine-tuning with early stopping
+	@echo "$(BLUE)Starting PEFT instruction fine-tuning with Early Stopping...$(NC)"
+	@export TOKENIZERS_PARALLELISM=false && \
+	if [ ! -f "scripts/finetune_lora_early_stopping.py" ]; then \
+		echo "$(RED)Error: scripts/finetune_lora_early_stopping.py not found$(NC)"; \
+		exit 1; \
+	fi; \
+	if [ ! -d "$(PRETRAINED_MODEL_PATH)" ]; then \
+		echo "$(RED)Error: Pre-trained model to fine-tune not found at [$(PRETRAINED_MODEL_PATH)]$(NC)"; \
+		exit 1; \
+	fi; \
+	$(PYTHON_VENV) scripts/finetune_lora_early_stopping.py \
+		--base_model_path $(PRETRAINED_MODEL_PATH) \
+		--dataset_path $(INSTRUCTIONS_DATA) \
+		--output_dir $(MODEL_LORA_EARLY_STOP_DIR) \
+		--epochs 5 \
+		--lora_r $(LORA_RANK) \
+		--lora_alpha $(LORA_ALPHA) \
+		--lora_dropout $(LORA_DROPOUT) \
+		--eval_steps 50 \
+		--early_stopping_patience 3
+	@echo "$(GREEN)✓ Fine-tuning with early stopping complete. Best LoRA adapters saved to $(MODEL_LORA_EARLY_STOP_DIR)$(NC)"
+
+train-all: generate-corpus pretrain finetune ## Run complete training pipeline
+
+##@ Inference
+
+merge-and-test: ## Merge LoRA adapters and run a test inference
+	@echo "$(BLUE)Merging LoRA adapters and testing...$(NC)"
+	@ [ -f "scripts/merge_lora.py" ] || (echo "$(RED)Error: scripts/merge_lora.py not found$(NC)"; exit 1)
+	@ [ -d "$(PRETRAINED_MODEL_PATH)" ] || (echo "$(RED)Error: Base model not found at [$(PRETRAINED_MODEL_PATH)]$(NC)"; exit 1)
+	@ [ -d "$(MODEL_LORA)/final_model" ] || [ -d "$(MODEL_LORA_EARLY_STOP_DIR)/best_model" ] || (echo "$(RED)Error: No trained LoRA adapters found to merge.$(NC)"; echo "$(YELLOW)Please run fine-tuning first.$(NC)"; exit 1)
+	@{ \
+	    LORA_PATH_TO_MERGE=""; \
+	    if [ -d "$(MODEL_LORA_EARLY_STOP_DIR)/best_model" ]; then \
+	        LORA_PATH_TO_MERGE="$(MODEL_LORA_EARLY_STOP_DIR)/best_model"; \
+	    else \
+	        LORA_PATH_TO_MERGE="$(MODEL_LORA)/final_model"; \
+	    fi; \
+	    echo "Merging adapters from: $$LORA_PATH_TO_MERGE"; \
+	    $(PYTHON_VENV) scripts/merge_lora.py \
+	        --base_model_path $(PRETRAINED_MODEL_PATH) \
+	        --lora_adapters_path $$LORA_PATH_TO_MERGE \
+	        --output_path $(MODEL_MERGED_DIR); \
+	}
+	@echo "$(GREEN)✓ Merged model saved to $(MODEL_MERGED_DIR) and tested.$(NC)"
+
+test-model: ## Interactively ask a question and run inference (two-step process)
+	@echo "$(BLUE)Interactive testing is a two-step process to avoid shell issues.$(NC)"
+	@echo "1. Enter your question by running: $(GREEN)make ask$(NC)"
+	@echo "2. Run inference on that question with: $(GREEN)make test-from-file$(NC)"
+	@echo ""
+	@echo "Starting step 1 now..."
+	@make ask
+
+ask: ## Prompt for a multi-line question and save it to a file
+	@echo "$(BLUE)Preparing to ask a question...$(NC)"
+	@ [ -f "scripts/ask_question.py" ] || (echo "$(RED)Error: scripts/ask_question.py not found$(NC)"; exit 1)
+	@$(PYTHON_VENV) scripts/ask_question.py
+
+test-from-file: ## Run inference using the question from the last 'make ask'
+	@echo "$(BLUE)Running inference from last question...$(NC)"
+	@LAST_QUESTION_FILE=logs/last_question.txt; \
+	if [ ! -f "$$LAST_QUESTION_FILE" ]; then \
+		echo "$(RED)Error: No question file found at [$$LAST_QUESTION_FILE]$(NC)"; \
+		echo "$(YELLOW)Please run 'make ask' or 'make test-model' first to enter a question.$(NC)"; \
+		exit 1; \
+	fi
+	@ [ -f "scripts/test_inference.py" ] || (echo "$(RED)Error: scripts/test_inference.py not found$(NC)"; exit 1)
+	@ [ -d "$(MODEL_MERGED_DIR)" ] || (echo "$(RED)Error: Merged model not found at [$(MODEL_MERGED_DIR)]$(NC)"; echo "$(YELLOW)Run 'make merge-and-test' first.$(NC)"; exit 1)
+	@QUESTION=$$(cat $$LAST_QUESTION_FILE); \
+	$(PYTHON_VENV) scripts/test_inference.py \
+		--model_path $(MODEL_MERGED_DIR) \
+		--question "$$QUESTION"
+
+##@ Testing
+
+test-corpus: corpus-test ## Test corpus generation
+	@echo "$(BLUE)Testing corpus generation...$(NC)"
+	@if [ -f "$(CORPUS_TEST)" ]; then \
+		wc -l $(CORPUS_TEST); \
+		head -n 20 $(CORPUS_TEST); \
+		echo "$(GREEN)✓ Corpus test passed$(NC)"; \
+	else \
+		echo "$(RED)Error: Corpus file not found$(NC)"; \
+		exit 1; \
+	fi
+
+##@ Monitoring
+
+tensorboard: ## Launch TensorBoard
+	@echo "$(BLUE)Launching TensorBoard...$(NC)"
+	@echo "$(YELLOW)Access at: http://localhost:6006$(NC)"
+	@$(VENV_BIN)/tensorboard --logdir models/ --port 6006
+
+logs: ## Show recent training logs
+	@echo "$(BLUE)Recent training logs:$(NC)"
+	@if [ -d "logs" ]; then \
+		ls -lt logs/ | head -n 10; \
+	else \
+		echo "$(YELLOW)No logs directory found$(NC)"; \
+	fi
+
+##@ Cleanup
+
+clean-venv: ## Remove virtual environment
+	@echo "$(BLUE)Removing virtual environment...$(NC)"
+	@rm -rf $(VENV)
+	@echo "$(GREEN)✓ Virtual environment removed$(NC)"
+
+clean-data: ## Remove generated corpus data
+	@echo "$(BLUE)Removing generated data...$(NC)"
+	@rm -rf training_data/
+	@echo "$(GREEN)✓ Generated data removed$(NC)"
+
+clean-models: ## Remove trained models (WARNING: irreversible!)
+	@echo "$(RED)WARNING: This will delete all trained models!$(NC)"
+	@echo "$(YELLOW)Press Ctrl+C to cancel, or Enter to continue...$(NC)"
+	@read -r
+	@rm -rf models/
+	@echo "$(GREEN)✓ Models removed$(NC)"
+
+clean-cache: ## Clean Python cache files
+	@echo "$(BLUE)Cleaning cache files...$(NC)"
+	@find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type f -name "*.pyc" -delete
+	@find . -type f -name "*.pyo" -delete
+	@echo "$(GREEN)✓ Cache cleaned$(NC)"
+
+clean: clean-cache ## Clean cache and temporary files
+	@echo "$(GREEN)✓ Cleanup complete$(NC)"
+
+clean-all: clean clean-venv clean-data ## Remove everything except models
+	@echo "$(GREEN)✓ Full cleanup complete (models preserved)$(NC)"
+
+##@ Development
+
+format: ## Format code with black
+	@echo "$(BLUE)Formatting code...$(NC)"
+	@$(VENV_BIN)/black scripts/ *.py
+	@echo "$(GREEN)✓ Code formatted$(NC)"
+
+lint: ## Lint code with flake8
+	@echo "$(BLUE)Linting code...$(NC)"
+	@$(VENV_BIN)/flake8 scripts/ *.py --max-line-length=100
+	@echo "$(GREEN)✓ Linting complete$(NC)"
+
+##@ Package Management
+
+freeze: ## Freeze current package versions
+	@echo "$(BLUE)Freezing package versions...$(NC)"
+	@$(PIP) freeze > requirements.lock
+	@echo "$(GREEN)✓ Packages frozen to requirements.lock$(NC)"
+
+update-packages: ## Update all packages to latest compatible versions
+	@echo "$(BLUE)Updating packages to latest compatible versions...$(NC)"
+	@echo "$(YELLOW)This will update packages within the version ranges in requirements.txt$(NC)"
+	@$(PIP) install --upgrade -r requirements.txt
+	@echo "$(GREEN)✓ Packages updated$(NC)"
+	@echo "$(YELLOW)Run 'make freeze' to save current versions$(NC)"
+
+check-outdated: ## Check for outdated packages
+	@echo "$(BLUE)Checking for outdated packages...$(NC)"
+	@$(PIP) list --outdated
+
+update-requirements: ## Generate fresh requirements.txt with latest versions (automated)
+	@echo "$(BLUE)Generating fresh requirements.txt with latest versions from PyPI...$(NC)"
+	@if [ ! -f "scripts/update_requirements.py" ]; then \
+		echo "$(RED)Error: scripts/update_requirements.py not found$(NC)"; \
+		exit 1; \
+	fi
+	@echo "$(YELLOW)Backing up current requirements.txt to requirements.txt.backup$(NC)"
+	@cp requirements.txt requirements.txt.backup 2>/dev/null || true
+	@$(PYTHON_VENV) scripts/update_requirements.py
+	@echo "$(GREEN)✓ Requirements updated$(NC)"
+	@echo "$(YELLOW)Previous version saved as requirements.txt.backup$(NC)"
+	@echo "$(YELLOW)Run 'make install' to update packages$(NC)"
+
+update-requirements-manual: ## Generate requirements using shell (fallback)
+	@echo "$(BLUE)Generating fresh requirements.txt (manual mode)...$(NC)"
+	@echo "# Generated: $$(date)" > requirements.new
+	@echo "# Latest compatible versions for SLM training" >> requirements.new
+	@echo "" >> requirements.new
+	@echo "# Core ML Framework - PyTorch" >> requirements.new
+	@echo "torch>=2.1.0,<3.0.0" >> requirements.new
+	@echo "torchvision>=0.16.0,<1.0.0" >> requirements.new
+	@echo "torchaudio>=2.1.0,<3.0.0" >> requirements.new
+	@echo "" >> requirements.new
+	@for pkg in transformers datasets accelerate peft sentencepiece protobuf tensorboard pandas numpy tqdm matplotlib seaborn jupyter ipykernel black flake8 isort rich pyyaml; do \
+		latest=$$($(PIP) index versions $$pkg 2>/dev/null | grep "Available versions:" | head -1 | cut -d' ' -f3 | cut -d',' -f1); \
+		if [ -n "$$latest" ]; then \
+			major=$$(echo $$latest | cut -d'.' -f1); \
+			next_major=$$((major + 1)); \
+			echo "$$pkg>=$$latest,<$$next_major.0.0" >> requirements.new; \
+		fi; \
+	done
+	@echo "" >> requirements.new
+	@echo "$(GREEN)✓ New requirements generated in requirements.new$(NC)"
+	@echo "$(YELLOW)Review and replace: mv requirements.new requirements.txt$(NC)"
+
+install-latest: ## Install latest versions (ignores pins)
+	@echo "$(BLUE)Installing latest versions of all packages...$(NC)"
+	@echo "$(RED)WARNING: This ignores version pins and may cause compatibility issues$(NC)"
+	@echo "$(YELLOW)Press Ctrl+C to cancel, or Enter to continue...$(NC)"
+	@read -r
+	@$(PIP) install --upgrade torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+	@$(PIP) install --upgrade transformers datasets accelerate peft sentencepiece protobuf tensorboard
+	@$(PIP) install --upgrade pandas numpy tqdm matplotlib seaborn jupyter ipykernel
+	@$(PIP) install --upgrade black flake8 isort rich pyyaml bitsandbytes
+	@echo "$(GREEN)✓ Latest versions installed$(NC)"
+	@echo "$(YELLOW)Run 'make freeze' to save these versions$(NC)"
+
+##@ Quick Commands
+
+all: clean-venv setup install verify dirs ## Complete setup from scratch
+	@echo ""
+	@echo "$(GREEN)========================================$(NC)"
+	@echo "$(GREEN)✓ Setup complete!$(NC)"
+	@echo "$(GREEN)========================================$(NC)"
+	@echo ""
+	@echo "$(BLUE)Next steps:$(NC)"
+	@echo "  1. Activate environment: $(YELLOW)source $(VENV)/bin/activate$(NC)"
+	@echo "  2. Generate corpus:     $(YELLOW)make generate-corpus$(NC)"
+	@echo "  3. Start training:      $(YELLOW)make pretrain$(NC)"
+	@echo ""
+	@echo "Or run complete pipeline: $(YELLOW)make train-all$(NC)"
+	@echo ""
+
+quick-setup: setup install verify ## Quick setup (no kernel install)
+	@echo "$(GREEN)✓ Quick setup complete$(NC)"
+
+status: ## Show project status
+	@echo "$(BLUE)Project Status:$(NC)"
+	@echo ""
+	@echo "Environment:"
+	@if [ -d "$(VENV)" ]; then \
+		echo "  ✓ Virtual environment: $(GREEN)exists$(NC)"; \
+	else \
+		echo "  ✗ Virtual environment: $(RED)missing$(NC)"; \
+	fi
+	@echo ""
+	@echo "Data:"
+	@if [ -f "$(CORPUS_TEST)" ]; then \
+		echo "  ✓ Test corpus: $(GREEN)generated$(NC)"; \
+	else \
+		echo "  ✗ Test corpus: $(YELLOW)not generated$(NC)"; \
+	fi
+	@if [ -f "$(CORPUS_FULL)" ]; then \
+		echo "  ✓ Full corpus: $(GREEN)generated$(NC)"; \
+	else \
+		echo "  ✗ Full corpus: $(YELLOW)not generated$(NC)"; \
+	fi
+	@echo ""
+	@echo "Models:"
+	@if [ -d "$(MODEL_PRETRAINED)/final" ]; then \
+		echo "  ✓ Pre-trained model: $(GREEN)exists$(NC)"; \
+	else \
+		echo "  ✗ Pre-trained model: $(YELLOW)not trained$(NC)"; \
+	fi
+	@if [ -d "$(MODEL_LORA)/final" ]; then \
+		echo "  ✓ LoRA adapters: $(GREEN)exists$(NC)"; \
+	else \
+		echo "  ✗ LoRA adapters: $(YELLOW)not trained$(NC)"; \
+	fi
+
+##@ Information
+
+info: ## Show environment info
+	@echo "$(BLUE)Environment Information:$(NC)"
+	@echo "  Python: $(PYTHON)"
+	@echo "  Virtual env: $(VENV)"
+	@echo "  Test metadata: $(TEST_META)"
+	@echo "  Full metadata: $(FULL_META)"
+	@echo "  Taxonomy: $(TAXONOMY)"
+	@echo ""
+	@echo "$(BLUE)Output Paths:$(NC)"
+	@echo "  Test corpus: $(CORPUS_TEST)"
+	@echo "  Full corpus: $(CORPUS_FULL)"
+	@echo "  Pre-trained model: $(MODEL_PRETRAINED)"
+	@echo "  LoRA model: $(MODEL_LORA)"
+
+version: ## Show version information
+	@echo "$(BLUE)Version Information:$(NC)"
+	@if [ -f "$(VENV_BIN)/python" ]; then \
+		$(PYTHON_VENV) --version; \
+		$(PIP) --version; \
+	else \
+		echo "$(YELLOW)Virtual environment not found. Run 'make setup' first.$(NC)"; \
+	fi
