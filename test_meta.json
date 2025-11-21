@@ -1,0 +1,1082 @@
+  {"cubes": [
+      {
+      "name": "semantic_catalog",
+      "type": "view",
+      "title": "Semantic Catalog",
+      "isVisible": true,
+      "public": true,
+      "description": "This a metadata about semantic views. This catalog share the complete information of all the semantic views available to a user along with other meta data like Semantic Catalog, Dimension Name, Attribute Type, Dimension Title, SQL Expression, Is it Primary Key, Dimension Data Type, Table Name, Cube Description, Cube Title, Cube Data Source, Semantic View Name,  Semantic View Title, Semantic View Description, Visible in Semantic View, Relationship Path, Semantic View Folder Name.",
+      "measures": [],
+      "dimensions": [
+        {
+          "name": "semantic_catalog.dimension_name",
+          "title": "Semantic Catalog Dimension Name",
+          "type": "string",
+          "description": "Technical Name of a dimension in a Cube.dev semantic tool",
+          "shortTitle": "Dimension Name",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "semantic_catalog_dev.dimension_name"
+        },
+        {
+          "name": "semantic_catalog.dimension_measure_flag",
+          "title": "Semantic Catalog Attribute Type",
+          "type": "string",
+          "description": "Type of an attribute in a semantic view, it could be a dimension or a measure",
+          "shortTitle": "Attribute Type",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "semantic_catalog_dev.dimension_measure_flag"
+        },
+        {
+          "name": "semantic_catalog.dimension_title",
+          "title": "Semantic Catalog Dimension Title",
+          "type": "string",
+          "description": "It is label or name provided by Business User",
+          "shortTitle": "Dimension Title",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "semantic_catalog_dev.dimension_title"
+        },
+        {
+          "name": "semantic_catalog.dimension_sql",
+          "title": "Semantic Catalog SQL Expression",
+          "type": "string",
+          "description": "It is an expression or a databse column from a table.",
+          "shortTitle": "SQL Expression",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "semantic_catalog_dev.dimension_sql"
+        },
+        {
+          "name": "semantic_catalog.primary_key",
+          "title": "Semantic Catalog Is it Primary Key",
+          "type": "boolean",
+          "description": "It identifies if it used as a primary key of table.",
+          "shortTitle": "Is it Primary Key",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "semantic_catalog_dev.primary_key"
+        },
+        {
+          "name": "semantic_catalog.dimension_type",
+          "title": "Semantic Catalog Dimension Data Type",
+          "type": "string",
+          "description": "It is data type of dimensional value. It is could be a string, number, datetime or a geo spatial cordinate",
+          "shortTitle": "Dimension Data Type",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "semantic_catalog_dev.dimension_type"
+        },
+        {
+          "name": "semantic_catalog.cube_sql_table",
+          "title": "Semantic Catalog Table Name",
+          "type": "string",
+          "description": "It is name of the database table/view or name of could be a derived sql in cube.dev",
+          "shortTitle": "Table Name",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "semantic_catalog_dev.cube_sql_table"
+        },
+        {
+          "name": "semantic_catalog.cube_description",
+          "title": "Semantic Catalog Cube Description",
+          "type": "string",
+          "description": "It is description about a cube that contributes towards a semantic view in cube.dev",
+          "shortTitle": "Cube Description",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "semantic_catalog_dev.cube_description"
+        },
+        {
+          "name": "semantic_catalog.cube_title",
+          "title": "Semantic Catalog Cube Title",
+          "type": "string",
+          "description": "It is label or name provided by Business User to a cube in cube.dev",
+          "shortTitle": "Cube Title",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "semantic_catalog_dev.cube_title"
+        },
+        {
+          "name": "semantic_catalog.cube_data_source",
+          "title": "Semantic Catalog Cube Data Source",
+          "type": "string",
+          "description": "It is label or name provided data source in cube.dev. For e.g. Breeding data sources, Veg data sources.",
+          "shortTitle": "Cube Data Source",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "semantic_catalog_dev.cube_data_source"
+        },
+        {
+          "name": "semantic_catalog.view_name",
+          "title": "Semantic Catalog Semantic View Name",
+          "type": "string",
+          "description": "Technical Name of a semantic view in a Cube.dev semantic tool",
+          "shortTitle": "Semantic View Name",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "semantic_catalog_dev.view_name"
+        },
+        {
+          "name": "semantic_catalog.view_title",
+          "title": "Semantic Catalog Semantic View Title",
+          "type": "string",
+          "description": "It is label or name given to Semantic View Name to map to Business Context. It is provided by Business Users",
+          "shortTitle": "Semantic View Title",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "semantic_catalog_dev.view_title"
+        },
+        {
+          "name": "semantic_catalog.view_description",
+          "title": "Semantic Catalog Semantic View Description",
+          "type": "string",
+          "description": "It is description about a Semantic View Name to map to Business Context. It is provided by Business Users",
+          "shortTitle": "Semantic View Description",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "semantic_catalog_dev.view_description"
+        },
+        {
+          "name": "semantic_catalog.visible_in_view",
+          "title": "Semantic Catalog Visible in Semantic View",
+          "type": "boolean",
+          "description": "It is flag that indicates if a dimension is enables to access through any Semantic View",
+          "shortTitle": "Visible in Semantic View",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "semantic_catalog_dev.visible_in_view"
+        },
+        {
+          "name": "semantic_catalog.join_path",
+          "title": "Semantic Catalog Relationship Path",
+          "type": "string",
+          "description": "It show how different cubes(tables) in cube.dev connect in a Semantic View",
+          "shortTitle": "Relationship Path",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "semantic_catalog_dev.join_path"
+        },
+        {
+          "name": "semantic_catalog.join_sql",
+          "title": "Semantic Catalog Relationship SQL",
+          "type": "string",
+          "description": "It is the join condition in cube.dev",
+          "shortTitle": "Relationship SQL",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "semantic_catalog_dev.join_sql"
+        },
+        {
+          "name": "semantic_catalog.join_relationship",
+          "title": "Semantic Catalog Relationship Cardinalities",
+          "type": "string",
+          "description": "It show the cardinality between cubes. For e.g. one_to_one, one_to_many, many_to_one, many_to_many",
+          "shortTitle": "Relationship Cardinalities",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "semantic_catalog_dev.join_relationship"
+        },
+        {
+          "name": "semantic_catalog.view_folder_name",
+          "title": "Semantic Catalog Semantic View Folder Name",
+          "type": "string",
+          "description": "It is the name of the business entitiy used to organize the dimensions/measures in a Semantic View",
+          "shortTitle": "Semantic View Folder Name",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "semantic_catalog_dev.view_folder_name"
+        },
+        {
+          "name": "semantic_catalog.adapt_environment",
+          "title": "Semantic Catalog ADAPT Environment",
+          "type": "string",
+          "description": "This shows the ADAPT Environment associated to the Semantic Catalog",
+          "shortTitle": "ADAPT Environment",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "semantic_catalog_dev.adapt_environment"
+        },
+        {
+          "name": "semantic_catalog.adapt_environment_url",
+          "title": "Semantic Catalog ADAPT URL",
+          "type": "string",
+          "description": "This shows the ADAPT Environment URL associated to the Semantic Catalog",
+          "shortTitle": "ADAPT URL",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "semantic_catalog_dev.adapt_environment_url"
+        }
+      ],
+      "segments": [],
+      "hierarchies": [],
+      "folders": [
+        {
+          "name": "Dimension/Measure Information",
+          "members": [
+            "semantic_catalog.dimension_name",
+            "semantic_catalog.dimension_measure_flag",
+            "semantic_catalog.dimension_title",
+            "semantic_catalog.dimension_sql",
+            "semantic_catalog.primary_key",
+            "semantic_catalog.dimension_type"
+          ]
+        },
+        {
+          "name": "Cubes/Table Information",
+          "members": [
+            "semantic_catalog.cube_sql_table",
+            "semantic_catalog.cube_description",
+            "semantic_catalog.cube_title",
+            "semantic_catalog.cube_data_source",
+            "semantic_catalog.join_sql",
+            "semantic_catalog.join_relationship"
+          ]
+        },
+        {
+          "name": "Semantic View Information",
+          "members": [
+            "semantic_catalog.view_name",
+            "semantic_catalog.view_title",
+            "semantic_catalog.view_description",
+            "semantic_catalog.visible_in_view",
+            "semantic_catalog.join_path",
+            "semantic_catalog.view_folder_name"
+          ]
+        },
+        {
+          "name": "ADAPT Environment Details",
+          "members": [
+            "semantic_catalog.adapt_environment",
+            "semantic_catalog.adapt_environment_url"
+          ]
+        }
+      ]
+    },
+     {
+      "name": "edited_allele_analysis",
+      "type": "view",
+      "title": "Edited Allele Analysis",
+      "isVisible": true,
+      "public": true,
+      "description": "A combined view of EditedAlleleCallID, EditedAlleleID, and SMEv2SEQProject_meta_data to provide a unified dataset for allele analysis and sequencing project metadata.\n",
+      "measures": [
+        {
+          "name": "edited_allele_analysis.count_distinct_edited_allele_call_id",
+          "title": "Edited Allele Analysis Distinct Count of Edited Allele Call ID",
+          "description": "This is to get Distinct count of Edited Allele Call ID",
+          "shortTitle": "Distinct Count of Edited Allele Call ID",
+          "cumulativeTotal": false,
+          "cumulative": false,
+          "type": "number",
+          "aggType": "countDistinct",
+          "drillMembers": [],
+          "drillMembersGrouped": {
+            "measures": [],
+            "dimensions": []
+          },
+          "isVisible": true,
+          "public": true
+        },
+        {
+          "name": "edited_allele_analysis.sum_of_allele_call_read_count",
+          "title": "Edited Allele Analysis Total Allele Call Reads",
+          "description": "This is to get sum of Allele Call Read Counts",
+          "shortTitle": "Total Allele Call Reads",
+          "cumulativeTotal": false,
+          "cumulative": false,
+          "type": "number",
+          "aggType": "sum",
+          "drillMembers": [],
+          "drillMembersGrouped": {
+            "measures": [],
+            "dimensions": []
+          },
+          "isVisible": true,
+          "public": true
+        },
+        {
+          "name": "edited_allele_analysis.count_distinct_seqlims_project",
+          "title": "Edited Allele Analysis Distinct Count of Sequence Project",
+          "description": "This is to get distinct count of Sequence Project",
+          "shortTitle": "Distinct Count of Sequence Project",
+          "cumulativeTotal": false,
+          "cumulative": false,
+          "type": "number",
+          "aggType": "countDistinct",
+          "drillMembers": [],
+          "drillMembersGrouped": {
+            "measures": [],
+            "dimensions": []
+          },
+          "isVisible": true,
+          "public": true
+        },
+        {
+          "name": "edited_allele_analysis.count_distinct_edited_allele_id",
+          "title": "Edited Allele Analysis Distinct Count of Edited Allele ID",
+          "description": "This is to get Distinct count of Edited Allele ID",
+          "shortTitle": "Distinct Count of Edited Allele ID",
+          "cumulativeTotal": false,
+          "cumulative": false,
+          "type": "number",
+          "aggType": "countDistinct",
+          "drillMembers": [],
+          "drillMembersGrouped": {
+            "measures": [],
+            "dimensions": []
+          },
+          "isVisible": true,
+          "public": true
+        }
+      ],
+      "dimensions": [
+        {
+          "name": "edited_allele_analysis.edited_allele_call_id",
+          "title": "Edited Allele Analysis Edited Allele Call ID",
+          "type": "string",
+          "description": "A concatenation of Sample ID Product 360 (p360) curated reference assembly including the chromosome or contig pollux ID identifying the guide used coordinate of the guide on the reference assembly and local_CIGAR. This makes this effectively a UUID for SME2.\n",
+          "shortTitle": "Edited Allele Call ID",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "EditedAlleleCallID.edited_allele_call_id"
+        },
+        {
+          "name": "edited_allele_analysis.sample_id",
+          "title": "Edited Allele Analysis Sample ID",
+          "type": "string",
+          "description": "The Sample ID as designated by the LIMS system note is a concatenation of underscore separated SEQID and sample number.\n",
+          "shortTitle": "Sample ID",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "EditedAlleleCallID.sample_id"
+        },
+        {
+          "name": "edited_allele_analysis.call_ref_id",
+          "title": "Edited Allele Analysis Reference ID",
+          "type": "string",
+          "description": "The Bayer Product 360 curated reference assembly including the chromosome (contig) the allele is on.\n",
+          "shortTitle": "Reference ID",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "EditedAlleleCallID.call_ref_id"
+        },
+        {
+          "name": "edited_allele_analysis.barcode",
+          "title": "Edited Allele Analysis Barcode",
+          "type": "string",
+          "description": "Barcode refers to the plant barcode or gds barcode as provided from LIMS and importantly is sample specific.\n",
+          "shortTitle": "Barcode",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "EditedAlleleCallID.barcode"
+        },
+        {
+          "name": "edited_allele_analysis.reagent",
+          "title": "Edited Allele Analysis Reagent",
+          "type": "string",
+          "description": "This generally refers to constructs or pMONs but in the future could indicate other methodologies for introducing foreign DNA.\n",
+          "shortTitle": "Reagent",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "EditedAlleleCallID.reagent"
+        },
+        {
+          "name": "edited_allele_analysis.guide_name",
+          "title": "Edited Allele Analysis Guide Name",
+          "type": "string",
+          "description": "Pollux ID from SeqUR for the guide used to create this edit.\n",
+          "shortTitle": "Guide Name",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "EditedAlleleCallID.guide_name"
+        },
+        {
+          "name": "edited_allele_analysis.allele_call_read_count",
+          "title": "Edited Allele Analysis Allele Call Read Counts",
+          "type": "number",
+          "description": "Count of reads with this allele call covering the guide window.\n",
+          "shortTitle": "Allele Call Read Counts",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "EditedAlleleCallID.allele_call_read_count"
+        },
+        {
+          "name": "edited_allele_analysis.percent_of_reads_covering_guide",
+          "title": "Edited Allele Analysis Percent Reads",
+          "type": "number",
+          "description": "Percentage of reads covering the guide with this exact allele. Calculated as allele_call_read_count over total_reads_covering_guide.\n",
+          "shortTitle": "Percent Reads",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "EditedAlleleCallID.percent_of_reads_covering_guide"
+        },
+        {
+          "name": "edited_allele_analysis.hamming_distance",
+          "title": "Edited Allele Analysis Hamming Distance",
+          "type": "number",
+          "description": "Number of differences between two sequences of the same length in this case the reference sequence and aligned read sequence.\n",
+          "shortTitle": "Hamming Distance",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "EditedAlleleCallID.hamming_distance"
+        },
+        {
+          "name": "edited_allele_analysis.allele_call_date_time",
+          "title": "Edited Allele Analysis Allele Call Uploaded Datetime",
+          "type": "string",
+          "description": "A timestamp of when this record was uploaded for discriminating between updates - usually due to reruns.\n",
+          "shortTitle": "Allele Call Uploaded Datetime",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "EditedAlleleCallID.allele_call_date_time"
+        },
+        {
+          "name": "edited_allele_analysis.seqlims_project",
+          "title": "Edited Allele Analysis Sequence Project",
+          "type": "string",
+          "description": "SEQID is the discrete unit of projects that go through the sequencing lab and groups a set of samples that were sequenced together in a library.\n",
+          "shortTitle": "Sequence Project",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "SMEv2_SEQProject_meta_data.seqlims_project"
+        },
+        {
+          "name": "edited_allele_analysis.sequencing_run",
+          "title": "Edited Allele Analysis Sequence Run ID",
+          "type": "string",
+          "description": "The run identifier from the sequencer that this project was ran on for backtracking and unifying with sequencing QC.\n",
+          "shortTitle": "Sequence Run ID",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "SMEv2_SEQProject_meta_data.sequencing_run"
+        },
+        {
+          "name": "edited_allele_analysis.number_of_samples_included",
+          "title": "Edited Allele Analysis Samples Included",
+          "type": "number",
+          "description": "The number of samples that were above the minimum required threshold (and met QC criteria) for inclusion in analysis.\n",
+          "shortTitle": "Samples Included",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "SMEv2_SEQProject_meta_data.number_of_samples_included"
+        },
+        {
+          "name": "edited_allele_analysis.number_of_samples_excluded",
+          "title": "Edited Allele Analysis Samples Excluded",
+          "type": "number",
+          "description": "The number of samples that were not above the minimum required threshold (or did not meet other QC criteria) for inclusion in analysis.\n",
+          "shortTitle": "Samples Excluded",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "SMEv2_SEQProject_meta_data.number_of_samples_excluded"
+        },
+        {
+          "name": "edited_allele_analysis.analysis_cutoff_used",
+          "title": "Edited Allele Analysis Analysis Cutoff Used",
+          "type": "number",
+          "description": "A float used to cutoff the analysis and keep noise due to sequencing error out of the results.\n",
+          "shortTitle": "Analysis Cutoff Used",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "SMEv2_SEQProject_meta_data.analysis_cutoff_used"
+        },
+        {
+          "name": "edited_allele_analysis.min_reads_used",
+          "title": "Edited Allele Analysis Min Reads Used",
+          "type": "number",
+          "description": "The minimum number of reads that must be present for a sample to be retained in the results otherwise filtered out.\n",
+          "shortTitle": "Min Reads Used",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "SMEv2_SEQProject_meta_data.min_reads_used"
+        },
+        {
+          "name": "edited_allele_analysis.sequencing_project_date_time",
+          "title": "Edited Allele Analysis Sequence Project Uploaded Datetime",
+          "type": "string",
+          "description": "A timestamp of when this record was uploaded for discriminating between updates - usually due to reruns.\n",
+          "shortTitle": "Sequence Project Uploaded Datetime",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "SMEv2_SEQProject_meta_data.sequencing_project_date_time"
+        },
+        {
+          "name": "edited_allele_analysis.edited_allele_id",
+          "title": "Edited Allele Analysis Edited Allele ID",
+          "type": "string",
+          "description": "A concatenation of reference name identifier with chromosome (contig) 5' coordinate start of guide and local CIGAR.\n",
+          "shortTitle": "Edited Allele ID",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "EditedAlleleID.edited_allele_id"
+        },
+        {
+          "name": "edited_allele_analysis.allele_type",
+          "title": "Edited Allele Analysis Allele Type",
+          "type": "string",
+          "description": "Type of allele, one of 'edit', 'wt', or 'offsite'.\n",
+          "shortTitle": "Allele Type",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "EditedAlleleID.allele_type"
+        },
+        {
+          "name": "edited_allele_analysis.edited_allele_ref_id",
+          "title": "Edited Allele Analysis Reference ID",
+          "type": "string",
+          "description": "The Bayer Product 360 curated reference assembly including the chromosome (contig) the allele is on.\n",
+          "shortTitle": "Reference ID",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "EditedAlleleID.edited_allele_ref_id"
+        },
+        {
+          "name": "edited_allele_analysis.fp_sequence",
+          "title": "Edited Allele Analysis Five Prime Sequence",
+          "type": "string",
+          "description": "Five prime sequence which is the sequence upstream of the guide window not including gaps.\n",
+          "shortTitle": "Five Prime Sequence",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "EditedAlleleID.fp_sequence"
+        },
+        {
+          "name": "edited_allele_analysis.tp_sequence",
+          "title": "Edited Allele Analysis Three Prime Sequence",
+          "type": "string",
+          "description": "Three prime sequence which is the sequence downstream of the guide window not including gaps.\n",
+          "shortTitle": "Three Prime Sequence",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "EditedAlleleID.tp_sequence"
+        },
+        {
+          "name": "edited_allele_analysis.ref_string",
+          "title": "Edited Allele Analysis Reference string",
+          "type": "string",
+          "description": "The wild-type or reference sequence of the guide region.\n",
+          "shortTitle": "Reference string",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "EditedAlleleID.ref_string"
+        },
+        {
+          "name": "edited_allele_analysis.match_string",
+          "title": "Edited Allele Analysis Sequence Match string",
+          "type": "string",
+          "description": "The sequence of the read aligned segment for the allele.\n",
+          "shortTitle": "Sequence Match string",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "EditedAlleleID.match_string"
+        },
+        {
+          "name": "edited_allele_analysis.CIGAR",
+          "title": "Edited Allele Analysis CIGAR(Compact Idiosyncratic Gapped Alignment Report)",
+          "type": "string",
+          "description": "Compact idiosyncratic gapped alignment report for the entire read with respect to the edited allele.\n",
+          "shortTitle": "CIGAR(Compact Idiosyncratic Gapped Alignment Report)",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "EditedAlleleID.CIGAR"
+        },
+        {
+          "name": "edited_allele_analysis.allele_date_time",
+          "title": "Edited Allele Analysis Allele Uploaded Datetime",
+          "type": "string",
+          "description": "A timestamp of when this record was uploaded for discriminating between updates - usually due to reruns.\n",
+          "shortTitle": "Allele Uploaded Datetime",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "EditedAlleleID.allele_date_time"
+        },
+        {
+          "name": "edited_allele_analysis.local_CIGAR",
+          "title": "Edited Allele Analysis Local CIGAR(Compact Idiosyncratic Gapped Alignment Report)",
+          "type": "string",
+          "description": "The CIGAR localized to the guide region including notation for contiguous edits outside the guide window.\n",
+          "shortTitle": "Local CIGAR(Compact Idiosyncratic Gapped Alignment Report)",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false,
+          "aliasMember": "EditedAlleleID.local_CIGAR"
+        }
+      ],
+      "segments": [],
+      "hierarchies": [],
+      "folders": [
+        {
+          "name": "Sequence Project",
+          "members": [
+            "edited_allele_analysis.seqlims_project",
+            "edited_allele_analysis.sequencing_run",
+            "edited_allele_analysis.sequencing_project_date_time",
+            "edited_allele_analysis.count_distinct_seqlims_project"
+          ]
+        },
+        {
+          "name": "Samples",
+          "members": [
+            "edited_allele_analysis.number_of_samples_included",
+            "edited_allele_analysis.number_of_samples_excluded",
+            "edited_allele_analysis.analysis_cutoff_used",
+            "edited_allele_analysis.min_reads_used",
+            "edited_allele_analysis.sample_id"
+          ]
+        },
+        {
+          "name": "Edited Allele Call Information",
+          "members": [
+            "edited_allele_analysis.edited_allele_call_id",
+            "edited_allele_analysis.sample_id",
+            "edited_allele_analysis.call_ref_id",
+            "edited_allele_analysis.barcode",
+            "edited_allele_analysis.reagent",
+            "edited_allele_analysis.guide_name",
+            "edited_allele_analysis.allele_call_read_count",
+            "edited_allele_analysis.percent_of_reads_covering_guide",
+            "edited_allele_analysis.hamming_distance",
+            "edited_allele_analysis.allele_call_date_time",
+            "edited_allele_analysis.count_distinct_edited_allele_call_id",
+            "edited_allele_analysis.sum_of_allele_call_read_count"
+          ]
+        },
+        {
+          "name": "Edited Allele Information",
+          "members": [
+            "edited_allele_analysis.edited_allele_id",
+            "edited_allele_analysis.allele_type",
+            "edited_allele_analysis.edited_allele_ref_id",
+            "edited_allele_analysis.fp_sequence",
+            "edited_allele_analysis.tp_sequence",
+            "edited_allele_analysis.ref_string",
+            "edited_allele_analysis.match_string",
+            "edited_allele_analysis.CIGAR",
+            "edited_allele_analysis.local_CIGAR",
+            "edited_allele_analysis.allele_date_time",
+            "edited_allele_analysis.count_distinct_edited_allele_id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "EditedAlleleCallID",
+      "type": "cube",
+      "title": "Edited Allele Call",
+      "isVisible": true,
+      "public": true,
+      "description": "A concatenation of Sample ID Product 360 (p360) curated reference assembly including the chromosome or contig pollux ID identifying the guide used coordinate of the guide on the reference assembly and local_CIGAR. This makes this effectively a UUID for SME2.\n",
+      "connectedComponent": 1,
+      "measures": [
+        {
+          "name": "EditedAlleleCallID.count_distinct_edited_allele_call_id",
+          "title": "Edited Allele Call Distinct Count of Edited Allele Call ID",
+          "description": "This is to get Distinct count of Edited Allele Call ID",
+          "shortTitle": "Distinct Count of Edited Allele Call ID",
+          "cumulativeTotal": false,
+          "cumulative": false,
+          "type": "number",
+          "aggType": "countDistinct",
+          "drillMembers": [],
+          "drillMembersGrouped": {
+            "measures": [],
+            "dimensions": []
+          },
+          "isVisible": true,
+          "public": true
+        },
+        {
+          "name": "EditedAlleleCallID.sum_of_allele_call_read_count",
+          "title": "Edited Allele Call Total Allele Call Reads",
+          "description": "This is to get sum of Allele Call Read Counts",
+          "shortTitle": "Total Allele Call Reads",
+          "cumulativeTotal": false,
+          "cumulative": false,
+          "type": "number",
+          "aggType": "sum",
+          "drillMembers": [],
+          "drillMembersGrouped": {
+            "measures": [],
+            "dimensions": []
+          },
+          "isVisible": true,
+          "public": true
+        }
+      ],
+      "dimensions": [
+        {
+          "name": "EditedAlleleCallID.edited_allele_call_id",
+          "title": "Edited Allele Call Edited Allele Call ID",
+          "type": "string",
+          "description": "A concatenation of Sample ID Product 360 (p360) curated reference assembly including the chromosome or contig pollux ID identifying the guide used coordinate of the guide on the reference assembly and local_CIGAR. This makes this effectively a UUID for SME2.\n",
+          "shortTitle": "Edited Allele Call ID",
+          "suggestFilterValues": true,
+          "isVisible": false,
+          "public": false,
+          "primaryKey": true
+        },
+        {
+          "name": "EditedAlleleCallID.edited_allele_id",
+          "title": "Edited Allele Call Edited Allele ID",
+          "type": "string",
+          "description": "A concatenation of reference name identifier with chromosome (contig) 5' coordinate start of guide and local CIGAR.\n",
+          "shortTitle": "Edited Allele ID",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "EditedAlleleCallID.call_ref_id",
+          "title": "Edited Allele Call Reference ID",
+          "type": "string",
+          "description": "The Bayer Product 360 curated reference assembly including the chromosome (contig) the allele is on.\n",
+          "shortTitle": "Reference ID",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "EditedAlleleCallID.sample_id",
+          "title": "Edited Allele Call Sample ID",
+          "type": "string",
+          "description": "The Sample ID as designated by the LIMS system note is a concatenation of underscore separated SEQID and sample number.\n",
+          "shortTitle": "Sample ID",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "EditedAlleleCallID.barcode",
+          "title": "Edited Allele Call Barcode",
+          "type": "string",
+          "description": "Barcode refers to the plant barcode or gds barcode as provided from LIMS and importantly is sample specific.\n",
+          "shortTitle": "Barcode",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "EditedAlleleCallID.reagent",
+          "title": "Edited Allele Call Reagent",
+          "type": "string",
+          "description": "This generally refers to constructs or pMONs but in the future could indicate other methodologies for introducing foreign DNA.\n",
+          "shortTitle": "Reagent",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "EditedAlleleCallID.guide_name",
+          "title": "Edited Allele Call Guide Name",
+          "type": "string",
+          "description": "Pollux ID from SeqUR for the guide used to create this edit.\n",
+          "shortTitle": "Guide Name",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "EditedAlleleCallID.allele_call_read_count",
+          "title": "Edited Allele Call Allele Call Read Counts",
+          "type": "number",
+          "description": "Count of reads with this allele call covering the guide window.\n",
+          "shortTitle": "Allele Call Read Counts",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "EditedAlleleCallID.percent_of_reads_covering_guide",
+          "title": "Edited Allele Call Percent Reads",
+          "type": "number",
+          "description": "Percentage of reads covering the guide with this exact allele. Calculated as allele_call_read_count over total_reads_covering_guide.\n",
+          "shortTitle": "Percent Reads",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "EditedAlleleCallID.hamming_distance",
+          "title": "Edited Allele Call Hamming Distance",
+          "type": "number",
+          "description": "Number of differences between two sequences of the same length in this case the reference sequence and aligned read sequence.\n",
+          "shortTitle": "Hamming Distance",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "EditedAlleleCallID.allele_call_date_time",
+          "title": "Edited Allele Call Allele Call Uploaded Datetime",
+          "type": "string",
+          "description": "A timestamp of when this record was uploaded for discriminating between updates - usually due to reruns.\n",
+          "shortTitle": "Allele Call Uploaded Datetime",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "EditedAlleleCallID.Allele_Call_sequencing_run",
+          "title": "Edited Allele Call Sequence Run ID",
+          "type": "string",
+          "description": "The run identifier from the sequencer that this project was ran on for backtracking and unifying with sequencing QC.\n",
+          "shortTitle": "Sequence Run ID",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        }
+      ],
+      "segments": [],
+      "hierarchies": [],
+      "folders": []
+    },
+    {
+      "name": "EditedAlleleID",
+      "type": "cube",
+      "title": "Edited Allele",
+      "isVisible": true,
+      "public": true,
+      "description": "Schema for the edited allele table, containing information about reference identifiers, sequences, and alignment details.\n",
+      "connectedComponent": 1,
+      "measures": [
+        {
+          "name": "EditedAlleleID.count_distinct_edited_allele_id",
+          "title": "Edited Allele Distinct Count of Edited Allele ID",
+          "description": "This is to get Distinct count of Edited Allele ID",
+          "shortTitle": "Distinct Count of Edited Allele ID",
+          "cumulativeTotal": false,
+          "cumulative": false,
+          "type": "number",
+          "aggType": "countDistinct",
+          "drillMembers": [],
+          "drillMembersGrouped": {
+            "measures": [],
+            "dimensions": []
+          },
+          "isVisible": true,
+          "public": true
+        }
+      ],
+      "dimensions": [
+        {
+          "name": "EditedAlleleID.edited_allele_id",
+          "title": "Edited Allele Edited Allele ID",
+          "type": "string",
+          "description": "A concatenation of reference name identifier with chromosome (contig) 5' coordinate start of guide and local CIGAR.\n",
+          "shortTitle": "Edited Allele ID",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "EditedAlleleID.allele_type",
+          "title": "Edited Allele Allele Type",
+          "type": "string",
+          "description": "Type of allele, one of 'edit', 'wt', or 'offsite'.\n",
+          "shortTitle": "Allele Type",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "EditedAlleleID.edited_allele_ref_id",
+          "title": "Edited Allele Reference ID",
+          "type": "string",
+          "description": "The Bayer Product 360 curated reference assembly including the chromosome (contig) the allele is on.\n",
+          "shortTitle": "Reference ID",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "EditedAlleleID.fp_sequence",
+          "title": "Edited Allele Five Prime Sequence",
+          "type": "string",
+          "description": "Five prime sequence which is the sequence upstream of the guide window not including gaps.\n",
+          "shortTitle": "Five Prime Sequence",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "EditedAlleleID.tp_sequence",
+          "title": "Edited Allele Three Prime Sequence",
+          "type": "string",
+          "description": "Three prime sequence which is the sequence downstream of the guide window not including gaps.\n",
+          "shortTitle": "Three Prime Sequence",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "EditedAlleleID.ref_string",
+          "title": "Edited Allele Reference string",
+          "type": "string",
+          "description": "The wild-type or reference sequence of the guide region.\n",
+          "shortTitle": "Reference string",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "EditedAlleleID.match_string",
+          "title": "Edited Allele Sequence Match string",
+          "type": "string",
+          "description": "The sequence of the read aligned segment for the allele.\n",
+          "shortTitle": "Sequence Match string",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "EditedAlleleID.allele_date_time",
+          "title": "Edited Allele Allele Uploaded Datetime",
+          "type": "string",
+          "description": "A timestamp of when this record was uploaded for discriminating between updates - usually due to reruns.\n",
+          "shortTitle": "Allele Uploaded Datetime",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "EditedAlleleID.CIGAR",
+          "title": "Edited Allele CIGAR(Compact Idiosyncratic Gapped Alignment Report)",
+          "type": "string",
+          "description": "Compact idiosyncratic gapped alignment report for the entire read with respect to the edited allele.\n",
+          "shortTitle": "CIGAR(Compact Idiosyncratic Gapped Alignment Report)",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        },
+        {
+          "name": "EditedAlleleID.local_CIGAR",
+          "title": "Edited Allele Local CIGAR(Compact Idiosyncratic Gapped Alignment Report)",
+          "type": "string",
+          "description": "The CIGAR localized to the guide region including notation for contiguous edits outside the guide window.\n",
+          "shortTitle": "Local CIGAR(Compact Idiosyncratic Gapped Alignment Report)",
+          "suggestFilterValues": true,
+          "isVisible": true,
+          "public": true,
+          "primaryKey": false
+        }
+      ],
+      "segments": [],
+      "hierarchies": [],
+      "folders": []
+    }]
+  }
